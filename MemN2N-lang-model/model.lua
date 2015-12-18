@@ -2,7 +2,7 @@
 -- All rights reserved.
 --
 -- This source code is licensed under the BSD-style license found in the
--- LICENSE file in the root directory of this source tree. An additional grant 
+-- LICENSE file in the root directory of this source tree. An additional grant
 -- of patent rights can be found in the PATENTS file in the same directory.
 
 require('nn')
@@ -63,7 +63,9 @@ function g_build_model(params)
     costl.sizeAverage = false
     local cost = costl({pred, target})
     local model = nn.gModule({input, target, context, time}, {cost})
-    model:cuda()
+		if params.gpu > 0 then
+    	model:cuda()
+		end
     -- IMPORTANT! do weight sharing after model is in cuda
     for i = 1,#shareList do
         local m1 = shareList[i][1].data.module
